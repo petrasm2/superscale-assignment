@@ -2,7 +2,7 @@
   <div class="col" *ngIf="form">
     <h3>{{new ? 'Create task' : 'Update task'}} {{form.name}}</h3>
     <form [formGroup]="form.fg!" (ngSubmit)="submitTask()">
-      <div class="row bg-light border rounded mb-2">
+      <div class="row bg-light border rounded mb-2 py-2">
         <div class="col">
           <h4>Basic info</h4>
           <div class="mb-1">
@@ -17,13 +17,12 @@
           </div>
         </div>
       </div>
-      <div class="row bg-light border rounded mb-2" *ngIf="form.type">
+      <div class="row bg-light border rounded mb-2 py-2" *ngIf="form.type">
         <div class="col" formGroupName="fields">
           <h4>Fields</h4>
           <ng-container *ngFor="let field of TaskFieldsDesc[form.type]">
             <div class="mb-1">
               <label class="form-label" for="{{field.name}}">{{field.label}}</label>
-              {{field.name}}
               <ng-container [ngSwitch]="field.type">
                 <input *ngSwitchCase="FieldTypeEnum.NUMBER" class="form-control" type="number" id="{{field.name}}" [formControlName]="field.name">
                 <input *ngSwitchDefault class="form-control" type="text" id="{{field.name}}" [formControlName]="field.name">

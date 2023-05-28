@@ -33,6 +33,7 @@ export class TaskComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(data => {
+      this.new = data['new'];
       this.initForm(data['task']);
     });
   }

@@ -1,6 +1,6 @@
+<h3>Task list</h3>
 <div class="row">
   <div class="col">
-    <h1>Task list</h1>
 
     <table class="table table-responsive table-bordered table-striped">
       <thead>
@@ -16,10 +16,16 @@
           <td>{{task.type | taskType}}</td>
           <td>
             <button class="btn btn-sm btn-primary me-1" [disabled]="loading" [routerLink]="'../task/' + task._id">Edit task</button>
-            <button class="btn btn-sm btn-danger" [disabled]="loading">Delete task</button>
+            <button class="btn btn-sm btn-danger" [disabled]="loading" (click)="deleteTask(task)">Delete task</button>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <button class="btn btn-primary float-end" [routerLink]="'../task/new'">Add task</button>
   </div>
 </div>

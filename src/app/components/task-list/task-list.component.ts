@@ -12,12 +12,17 @@ export class TaskListComponent implements OnInit {
   loading: boolean = false;
   tasks: Task[] = [];
 
-  constructor(private taskService: TaskService) {
-
+  constructor(
+    private taskService: TaskService
+  ) {
   }
 
   ngOnInit(): void {
     this.loadTasks();
+  }
+
+  deleteTask(task: Task): void {
+    this.taskService.delete(task).subscribe().add(() => this.loadTasks());
   }
 
   private loadTasks() {

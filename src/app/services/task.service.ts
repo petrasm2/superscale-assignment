@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Task} from '../models/task.model';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
+import {TaskTypeEnum} from '../enums/task-type.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,14 @@ export class TaskService {
   constructor(
     private httpClient: HttpClient
   ) { }
+
+  new(): Observable<Task> {
+    return of({
+      type: TaskTypeEnum.WASH_DISHES,
+      name: 'New Task',
+      fields: {}
+    });
+  }
 
   getAll(): Observable<Task[]> {
     return this.httpClient.get<Task[]>(this.API_URL);
