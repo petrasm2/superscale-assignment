@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col" *ngIf="form">
+    <h3>{{new ? 'Create task' : 'Update task'}} {{form.name}}</h3>
+    <form [formGroup]="form.fg!" (ngSubmit)="submitTask()">
+      <div class="row bg-light border rounded mb-2">
+        <div class="col">
+          <h4>Basic info</h4>
+          <div class="mb-1">
+            <label class="form-label" for="type">Type</label>
+            <select class="form-control" id="type" formControlName="type">
+              <option *ngFor="let option of TaskTypeOptions" value="{{option}}">{{option | taskType}}</option>
+            </select>
+          </div>
+          <div class="mb-1">
+            <label class="form-label" for="name">Name</label>
+            <input class="form-control" type="text" id="name" formControlName="name">
+          </div>
+        </div>
+      </div>
+      <div class="row bg-light border rounded mb-2" *ngIf="form.type">
+        <div class="col" formGroupName="fields">
+          <h4>Fields</h4>
+          <ng-container *ngFor="let field of TaskFieldsDesc[form.type]">
+            <div class="mb-1">
+              <label class="form-label" for="{{field.name}}">{{field.label}}</label>
+              {{field.name}}
+              <ng-container [ngSwitch]="field.type">
+                <input *ngSwitchCase="FieldTypeEnum.NUMBER" class="form-control" type="number" id="{{field.name}}" [formControlName]="field.name">
+                <input *ngSwitchDefault class="form-control" type="text" id="{{field.name}}" [formControlName]="field.name">
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <button class="btn btn-primary float-end" [disabled]="loading || form.fg.invalid">Save task</button>
+          <button class="btn btn-secondary float-end me-1" (click)="exit()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
