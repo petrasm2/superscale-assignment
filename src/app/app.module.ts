@@ -10,13 +10,18 @@ import { TaskComponent } from './components/task/task.component';
 import {HttpClientModule} from '@angular/common/http';
 import { TaskTypeTranslationPipe } from './pipes/task-type-translation.pipe';
 import {ReactiveFormsModule} from '@angular/forms';
+import { HeaderComponent } from './components/header/header.component';
+import { ConfirmDeleteTaskComponent } from './modals/confirm-delete-task/confirm-delete-task.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TaskListComponent,
     TaskComponent,
-    TaskTypeTranslationPipe
+    TaskTypeTranslationPipe,
+    HeaderComponent,
+    HeaderComponent,
+    ConfirmDeleteTaskComponent
   ],
   imports: [
     BrowserModule,

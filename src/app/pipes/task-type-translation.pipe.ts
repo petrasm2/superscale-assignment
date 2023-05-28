@@ -6,8 +6,11 @@ import {TaskTypeEnum, TaskTypeTransaltions} from '../enums/task-type.enum';
 })
 export class TaskTypeTranslationPipe implements PipeTransform {
 
-  transform(value: TaskTypeEnum): string {
-    return TaskTypeTransaltions[value] || value;
+  transform(value: TaskTypeEnum | undefined): string {
+    if (value) {
+      return TaskTypeTransaltions[value] || value;
+    }
+    return '';
   }
 
 }

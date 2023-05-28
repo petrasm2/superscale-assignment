@@ -8,6 +8,7 @@ import {FieldTypeEnum} from '../../enums/field-type.enum';
 import {TaskTypeEnum} from '../../enums/task-type.enum';
 import {TaskService} from '../../services/task.service';
 import {Observable} from 'rxjs';
+import {ToastService} from '../../services/toast.service';
 
 @Component({
   selector: 'app-task',
@@ -28,7 +29,8 @@ export class TaskComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private dynamicFormService: DynamicFormService,
     private router: Router,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -48,7 +50,10 @@ export class TaskComponent implements OnInit {
 
   submitTask() {
     this.form?.fg.disable();
-    this.upload().subscribe({
+    this.upload().pipe(
+      this.toastService.successOp(this.new ? 'Task created' : 'Task updated'),
+      this.toastService.errorOp(this.new ? 'Task creation failed' : 'Task update failed'),
+    ).subscribe({
       next: () => this.exit(),
       error: () => this.form?.fg.enable()
     });

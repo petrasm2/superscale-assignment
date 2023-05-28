@@ -1,6 +1,6 @@
+<app-header [title]="new ? 'Create task' : 'Update task'" [showSpinner]="loading"></app-header>
 <div class="row">
   <div class="col" *ngIf="form">
-    <h3>{{new ? 'Create task' : 'Update task'}} {{form.name}}</h3>
     <form [formGroup]="form.fg!" (ngSubmit)="submitTask()">
       <div class="row bg-light border rounded mb-2 py-2">
         <div class="col">

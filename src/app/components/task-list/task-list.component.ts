@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {TaskService} from '../../services/task.service';
 import {Task} from '../../models/task.model';
+import {ToastService} from '../../services/toast.service';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {Observable, race, Subject} from 'rxjs';
+import {ConfirmDeleteTaskComponent} from '../../modals/confirm-delete-task/confirm-delete-task.component';
 
 @Component({
   selector: 'app-task-list',
@@ -13,7 +17,9 @@ export class TaskListComponent implements OnInit {
   tasks: Task[] = [];
 
   constructor(
-    private taskService: TaskService
+    private modalService: NgbModal,
+    private taskService: TaskService,
+    private toastService: ToastService
   ) {
   }
 
@@ -21,15 +27,45 @@ export class TaskListComponent implements OnInit {
     this.loadTasks();
   }
 
-  deleteTask(task: Task): void {
-    this.taskService.delete(task).subscribe().add(() => this.loadTasks());
+  private loadTasks() {
+    if (!this.loading) {
+      this.loading = true;
+      this.taskService.getAll().pipe(
+        this.toastService.errorOp('Task loading failed')
+      ).subscribe((tasks) => {
+        this.tasks = tasks;
+      }).add(() => this.loading = false);
+    }
   }
 
-  private loadTasks() {
+  deleteTask(task: Task): void {
+    if (!this.loading) {
+      this.showConfimDeleteModal(task).subscribe((result)=> {
+        if (result) {
+          this.doDeleteTask(task);
+        }
+      });
+    }
+  }
+
+  private doDeleteTask(task: Task) {
     this.loading = true;
-    this.taskService.getAll().subscribe((tasks) => {
-      this.tasks = tasks;
-    }).add(() => this.loading = false);
+    this.taskService.delete(task).pipe(
+      this.toastService.successOp('Task deleted'),
+      this.toastService.errorOp('Task deletion failed')
+    ).subscribe().add(() => {
+      this.loading = false;
+      this.loadTasks();
+    });
+  }
+
+  private showConfimDeleteModal(task: Task): Observable<boolean> {
+    const modalRef = this.modalService.open(ConfirmDeleteTaskComponent);
+    modalRef.componentInstance.task = task;
+    return race(
+      modalRef.closed,
+      modalRef.dismissed
+    )
   }
 
 
